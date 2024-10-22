@@ -26,7 +26,7 @@
         h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
-            color: #2607f2;
+            color: #f5a623;
         }
 
         textarea {
@@ -44,7 +44,7 @@
 
         button {
             padding: 10px 20px;
-            background-color: #1b00e9;
+            background-color: #f5a623;
             border: none;
             color: #1c1c1e;
             font-size: 1.2rem;
@@ -106,17 +106,17 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ text }),
+                body: JSON.stringify({ text: text }),
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.braille) {
-                    document.getElementById('output').innerHTML = data.braille;
-                    document.getElementById('error').innerHTML = '';
-                } else if (data.error) {
-                    document.getElementById('error').innerHTML = data.error;
-                    document.getElementById('output').innerHTML = '';
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.error) });
                 }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('output').innerHTML = data.braille;
+                document.getElementById('error').innerHTML = '';
             })
             .catch(error => {
                 document.getElementById('error').innerHTML = 'Error: ' + error.message;

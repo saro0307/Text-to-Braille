@@ -40,7 +40,7 @@ def index():
 @app.route('/convert', methods=['POST'])
 def convert():
     try:
-        data = request.json
+        data = request.get_json()
         input_text = data.get('text', '')
 
         if not input_text:
